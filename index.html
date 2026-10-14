@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Nehal & Himanshu – Wedding Invitation</title>
+<meta property="og:title" content="Nehal & Himanshu – Wedding Invitation">
+<meta property="og:image" content="pages/01.jpg">
+<style>
+  html,body{margin:0;height:100%;background:#000;overflow:hidden;-webkit-tap-highlight-color:transparent;user-select:none}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  #page{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;transition:opacity .18s}
+  #page.fade{opacity:0}
+  #count{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);color:#fff;font:13px system-ui,sans-serif;background:rgba(0,0,0,.45);padding:4px 12px;border-radius:12px;pointer-events:none}
+  .hint{position:fixed;top:50%;transform:translateY(-50%);color:#fff;font:28px system-ui;opacity:0;background:rgba(0,0,0,.35);width:44px;height:44px;line-height:42px;text-align:center;border-radius:50%;pointer-events:none;transition:opacity .2s}
+  #l{left:10px}#r{right:10px}
+  #stage:hover~#l.on,#stage:hover~#r.on{opacity:.7}
+</style>
+</head>
+<body>
+<div id="stage"><img id="page" alt="Invitation page" draggable="false"></div>
+<div class="hint" id="l">&#8249;</div><div class="hint" id="r">&#8250;</div>
+<div id="count"></div>
+<script>
+  const N = 7;
+  let i = 0;
+  const img = document.getElementById('page'), count = document.getElementById('count');
+  const l = document.getElementById('l'), r = document.getElementById('r');
+  function show(n){
+    if(n < 0 || n >= N) return;
+    i = n;
+    img.classList.add('fade');
+    const src = 'pages/' + String(i+1).padStart(2,'0') + '.jpg';
+    const t = new Image();
+    t.onload = () => { img.src = src; img.classList.remove('fade'); };
+    t.src = src;
+    count.textContent = (i+1) + ' / ' + N;
+    l.classList.toggle('on', i > 0); r.classList.toggle('on', i < N-1);
+    if(i+1 < N) new Image().src = 'pages/' + String(i+2).padStart(2,'0') + '.jpg';
+    history.replaceState(null,'','#'+(i+1));
+  }
+  document.getElementById('stage').addEventListener('click', e => {
+    show(e.clientX > innerWidth/2 ? i+1 : i-1);
+  });
+  addEventListener('keydown', e => {
+    if(['ArrowRight','PageDown',' '].includes(e.key)) show(i+1);
+    if(['ArrowLeft','PageUp'].includes(e.key)) show(i-1);
+  });
+  let sx = null;
+  addEventListener('touchstart', e => sx = e.touches[0].clientX, {passive:true});
+  show(Math.min(N, Math.max(1, parseInt(location.hash.slice(1)) || 1)) - 1);
+</script>
+</body>
+</html>
