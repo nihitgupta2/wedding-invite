@@ -19,7 +19,7 @@
   .page video{background:transparent}
 
   /* top-right controls */
-  .top{position:fixed;top:calc(12px + env(safe-area-inset-top));right:12px;z-index:20;display:flex;gap:10px}
+  .top{position:fixed;top:calc(12px + env(safe-area-inset-top));right:12px;z-index:20;display:flex;flex-direction:column;gap:10px}
   .round{width:44px;height:44px;border-radius:50%;border:1px solid var(--gold);background:linear-gradient(180deg,#fff6f4,var(--pink));color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;box-shadow:0 3px 12px rgba(0,0,0,.25),inset 0 0 0 2px rgba(255,255,255,.5)}
   .round svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
   .round:active{transform:scale(.94)}
@@ -28,14 +28,10 @@
 
   /* menu button */
   :root{--ink:#6b2b3a;--rose:#e9c9cc;--rose2:#f6e3e1;--sage:#d5e2d1;--lav:#e3dcf0;--butter:#f7ecc9;--paper:#fffaf3;--gold:#c8a45c;--soft:#8a6a70}
-  #fab{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);height:50px;padding:0 30px 0 24px;border-radius:25px;border:1px solid var(--gold);background:linear-gradient(180deg,#fff6ef,var(--rose));color:var(--ink);font:500 17px/1 'Cormorant Garamond',Georgia,serif;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;box-shadow:0 6px 20px rgba(107,43,58,.28),inset 0 0 0 3px rgba(255,255,255,.55);z-index:5;display:flex;align-items:center;gap:10px;white-space:nowrap;animation:pulse 2.6s infinite}
-  #fab svg{width:18px;height:18px}
-  #fab:active{transform:translateX(-50%) scale(.96)}
-  @keyframes pulse{0%{box-shadow:0 6px 20px rgba(107,43,58,.28),inset 0 0 0 3px rgba(255,255,255,.55),0 0 0 0 rgba(200,164,92,.7)}70%,100%{box-shadow:0 6px 20px rgba(107,43,58,.28),inset 0 0 0 3px rgba(255,255,255,.55),0 0 0 16px rgba(200,164,92,0)}}
 
   #sheetBg{position:fixed;inset:0;background:rgba(58,30,38,.5);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);display:none;z-index:6;align-items:flex-end;justify-content:center}
   #sheetBg.open{display:flex}
-  body:has(#sheetBg.open) #fab{visibility:hidden}
+  
   #sheet{position:relative;width:100%;min-width:0;max-width:480px;max-height:90%;overflow:auto;box-sizing:border-box;padding:30px 20px 30px;color:var(--ink);font:400 15px/1.5 'Jost',system-ui,sans-serif;user-select:text;
     background:radial-gradient(circle at 50% -10%,#fff 0,var(--paper) 45%,#fbeee6 100%);border-radius:34px 34px 0 0;border-top:1px solid var(--gold);animation:up .28s ease;scrollbar-width:none}
   #sheet::-webkit-scrollbar{display:none}
@@ -99,7 +95,7 @@
   #dots i.on{background:var(--pink3);height:20px;border-radius:5px;border-color:var(--gold)}
 
   /* page 7 RSVP call buttons + swipe hint */
-  #hint{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:12;color:var(--ink);font:500 12px 'Jost',sans-serif;letter-spacing:.2em;text-transform:uppercase;background:rgba(255,246,244,.92);border:1px solid var(--gold);padding:8px 16px;border-radius:20px;pointer-events:none;animation:bob 1.8s ease-in-out infinite;transition:opacity .4s}
+  #hint{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:12;color:var(--ink);font:500 12px 'Jost',sans-serif;letter-spacing:.2em;text-transform:uppercase;background:rgba(255,246,244,.92);border:1px solid var(--gold);padding:8px 16px;border-radius:20px;pointer-events:none;animation:bob 1.8s ease-in-out infinite;transition:opacity .4s}
   @keyframes bob{50%{transform:translate(-50%,-6px)}}
 </style>
 </head>
@@ -112,8 +108,8 @@
   <button class="round" id="snd" aria-label="Toggle music">
     <svg viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/><path class="x" d="M3 3l18 18"/></svg>
   </button>
+  <button class="round" id="fab" aria-label="Open menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 </div>
-<button id="fab" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Menu</button>
 <div id="sheetBg"><div id="sheet"></div></div>
 <audio id="music" src="music.m4a" loop preload="auto"></audio>
 
@@ -126,7 +122,7 @@
   for(let k = 1; k <= N; k++){
     const p = document.createElement('section'); p.className = 'page';
     p.innerHTML = '<div class="bg" style="background-image:url(p'+k+'.jpg)"></div><img class="poster" src="p'+k+'.jpg" alt="" draggable="false">' +
-      '<video muted playsinline preload="none" poster="p'+k+'.jpg"></video>';
+      '<video muted loop playsinline preload="none" poster="p'+k+'.jpg"></video>';
     pagesEl.appendChild(p);
     const d = document.createElement('i'); d.onclick = () => go(k-1); dotsEl.appendChild(d);
   }
@@ -198,6 +194,11 @@
     if(e.target && e.target.closest && e.target.closest('#snd')) return;
     tryMusic(); if(musicOn){ ['pointerdown','touchend','keydown'].forEach(x => removeEventListener(x, f)); }
   }, {passive:true}));
+  function bgPause(){ music.pause(); vids[cur].pause(); }
+  function fgResume(){ if(musicOn) music.play().catch(()=>{}); const v = vids[cur]; if(v.getAttribute('src')) v.play().catch(()=>{}); paintSnd(); }
+  document.addEventListener('visibilitychange', () => document.hidden ? bgPause() : fgResume());
+  addEventListener('pagehide', bgPause);
+  addEventListener('pageshow', e => { if(e.persisted) fgResume(); });
   music.addEventListener('play', paintSnd); music.addEventListener('pause', paintSnd);
   tryMusic(); paintSnd();
 
