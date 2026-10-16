@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Nehal & Himanshu – Wedding Invitation</title>
+<meta property="og:title" content="Nehal & Himanshu – Wedding Invitation">
+<meta property="og:image" content="p1.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#6b2b3a;--pink:#f4d6d9;--pink2:#fbe9e8;--pink3:#eab9c0;--gold:#c8a45c;--soft:#8a6a70;--paper:#fffaf3}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#1c1014;overflow:hidden;overscroll-behavior:none;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;font-family:'Jost',system-ui,sans-serif}
+  #pages{position:fixed;left:0;top:0;width:100%;height:100%;touch-action:none;transition:transform .75s cubic-bezier(.65,.05,.25,1);will-change:transform}
+  .page{position:relative;width:100%;height:100vh;height:100dvh;overflow:hidden;background:#1c1014}
+  .page .bg{position:absolute;inset:-6%;background-size:cover;background-position:center;filter:blur(26px) brightness(.8)}
+  .page video,.page .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+  .page video{background:transparent}
+
+  /* top-right controls */
+  .top{position:fixed;top:calc(12px + env(safe-area-inset-top));right:12px;z-index:20;display:flex;gap:10px}
+  .round{width:44px;height:44px;border-radius:50%;border:1px solid var(--gold);background:linear-gradient(180deg,#fff6f4,var(--pink));color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;box-shadow:0 3px 12px rgba(0,0,0,.25),inset 0 0 0 2px rgba(255,255,255,.5)}
+  .round svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .round:active{transform:scale(.94)}
+  #snd .x{display:none}
+  #snd.off .x{display:block}
+
+  /* hamburger dropdown */
+  #menu{position:fixed;top:calc(64px + env(safe-area-inset-top));right:12px;z-index:20;display:none;flex-direction:column;gap:8px;padding:10px;border-radius:20px;border:1px solid var(--gold);background:rgba(255,246,244,.97);box-shadow:0 10px 30px rgba(0,0,0,.35);animation:pop .22s ease}
+  #menu.open{display:flex}
+  #menu button{display:flex;align-items:center;gap:12px;min-width:190px;padding:12px 16px;border-radius:14px;border:1px solid rgba(200,164,92,.6);background:linear-gradient(180deg,#fff2ef,var(--pink));color:var(--ink);font:500 13px 'Jost',sans-serif;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;text-align:left}
+  #menu button svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  @keyframes pop{from{opacity:0;transform:translateY(-8px) scale(.97)}to{opacity:1;transform:none}}
+
+  /* panels */
+  #veil{position:fixed;inset:0;background:rgba(40,20,26,.55);z-index:30;display:none;align-items:center;justify-content:center;padding:20px}
+  #veil.open{display:flex}
+  #panel{position:relative;width:100%;max-width:380px;border-radius:30px;border:1px solid var(--gold);padding:34px 22px 26px;text-align:center;color:var(--ink);background:radial-gradient(circle at 50% -10%,#fff 0,var(--paper) 50%,var(--pink2) 100%);box-shadow:0 20px 60px rgba(0,0,0,.45);animation:pop .25s ease}
+  #panel::before{content:"";position:absolute;inset:6px;border:1px solid rgba(200,164,92,.5);border-radius:25px;pointer-events:none}
+  #panel .x{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;border:1px solid var(--gold);background:var(--pink);color:var(--ink);font-size:19px;line-height:1;cursor:pointer;padding:0}
+  #panel small{display:block;font:400 11px 'Jost',sans-serif;letter-spacing:.32em;text-transform:uppercase;color:var(--soft);margin-bottom:4px}
+  #panel h2{margin:0;font:italic 500 30px/1.1 'Cormorant Garamond',Georgia,serif}
+  .orn{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0 18px;color:var(--gold)}
+  .orn::before,.orn::after{content:"";height:1px;width:50px;background:linear-gradient(90deg,transparent,var(--gold))}
+  .orn::after{transform:scaleX(-1)}
+  .cd{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+  .cd div{border:1px solid rgba(200,164,92,.7);border-radius:36px 36px 12px 12px;padding:14px 2px 9px;background:linear-gradient(180deg,#fff0ee,var(--pink))}
+  .cd b{display:block;font:500 32px/1 'Cormorant Garamond',Georgia,serif}
+  .cd i{font:500 9.5px 'Jost',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--soft);font-style:normal}
+  .note{font:italic 500 17px 'Cormorant Garamond',Georgia,serif;color:var(--soft)}
+  .venue{font:600 23px 'Cormorant Garamond',Georgia,serif;line-height:1.2}
+  .loc{color:var(--soft);margin:4px 0 18px;font-size:14px}
+  .btn{display:inline-block;border:1px solid var(--gold);background:linear-gradient(180deg,#fff2ef,var(--pink));color:var(--ink);padding:11px 22px;border-radius:24px;font:500 13px 'Jost',sans-serif;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;cursor:pointer;box-shadow:0 2px 8px rgba(107,43,58,.15)}
+  .who{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid rgba(200,164,92,.5);border-radius:18px;padding:12px;margin-bottom:11px;text-align:left}
+  .av{width:48px;height:48px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font:italic 500 24px 'Cormorant Garamond',Georgia,serif;border:1px solid var(--gold);background:linear-gradient(135deg,#fbe9e6,#f4d6d9)}
+  .who .n{flex:1;min-width:0;font:600 19px 'Cormorant Garamond',Georgia,serif}
+  .who .n small{margin:0;font:400 12px 'Jost',sans-serif;letter-spacing:.03em;text-transform:none}
+  .who .btn{padding:8px 16px;font-size:12px}
+
+  /* dots */
+  #dots{position:fixed;right:10px;top:50%;transform:translateY(-50%);z-index:15;display:flex;flex-direction:column;gap:11px}
+  #dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.55);border:1px solid rgba(107,43,58,.4);transition:all .3s;cursor:pointer}
+  #dots i.on{background:var(--pink3);height:20px;border-radius:5px;border-color:var(--gold)}
+
+  /* page 7 RSVP call buttons + swipe hint */
+  #rsvpbar{position:absolute;left:0;right:0;bottom:calc(26px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:12px;z-index:5;padding:0 16px}
+  #hint{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:12;color:var(--ink);font:500 12px 'Jost',sans-serif;letter-spacing:.2em;text-transform:uppercase;background:rgba(255,246,244,.92);border:1px solid var(--gold);padding:8px 16px;border-radius:20px;pointer-events:none;animation:bob 1.8s ease-in-out infinite;transition:opacity .4s}
+  @keyframes bob{50%{transform:translate(-50%,-6px)}}
+</style>
+</head>
+<body>
+<div id="pages"></div>
+<div id="dots"></div>
+<div id="hint">Swipe up &#8593;</div>
+
+<div class="top">
+  <button class="round" id="snd" aria-label="Toggle music">
+    <svg viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/><path class="x" d="M3 3l18 18"/></svg>
+  </button>
+  <button class="round" id="burger" aria-label="Menu">
+    <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+</div>
+<div id="menu">
+  <button data-p="countdown"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5.2l3.2 2"/></svg>Countdown</button>
+  <button data-p="location"><svg viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg>Location</button>
+  <button data-p="contact"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>Contact</button>
+</div>
+<div id="veil"><div id="panel"></div></div>
+<audio id="music" src="music.m4a" loop preload="auto"></audio>
+
+<script>
+  const N = 7, MAP = 'https://www.google.com/maps/search/?api=1&query=Jaypee+Greens+Golf+and+Spa+Resort+Greater+Noida';
+  const pagesEl = document.getElementById('pages'), dotsEl = document.getElementById('dots');
+  let cur = 0, busy = false, playTimer = null;
+
+  /* ---------- build pages ---------- */
+  for(let k = 1; k <= N; k++){
+    const p = document.createElement('section'); p.className = 'page';
+    p.innerHTML = '<div class="bg" style="background-image:url(p'+k+'.jpg)"></div><img class="poster" src="p'+k+'.jpg" alt="" draggable="false">' +
+      '<video muted playsinline preload="none" poster="p'+k+'.jpg"></video>' +
+      (k === N ? '<div id="rsvpbar" onclick="event.stopPropagation()"><a class="btn" href="tel:+919910170370">Call Nitin</a><a class="btn" href="tel:+919811901370">Call Reena</a></div>' : '');
+    pagesEl.appendChild(p);
+    const d = document.createElement('i'); d.onclick = () => go(k-1); dotsEl.appendChild(d);
+  }
+  const vids = [...pagesEl.querySelectorAll('video')], dots = [...dotsEl.children];
+
+  function load(k){ const v = vids[k]; if(!v.getAttribute('src')){ v.src = 'p'+(k+1)+'.mp4'; v.preload = 'auto'; } }
+  function unload(k){ const v = vids[k]; if(v.getAttribute('src')){ v.pause(); v.removeAttribute('src'); v.load(); } }
+  function playCur(){
+    const v = vids[cur]; load(cur);
+    v.currentTime = 0; const pr = v.play(); if(pr) pr.catch(() => {});
+  }
+  function show(k, instant){
+    cur = k;
+    pagesEl.style.transition = instant ? 'none' : '';
+    pagesEl.style.transform = 'translateY(' + (-k * 100) + 'dvh)';
+    if(!CSS.supports('height','100dvh')) pagesEl.style.transform = 'translateY(' + (-k * innerHeight) + 'px)';
+    dots.forEach((d,i) => d.classList.toggle('on', i === k));
+    vids.forEach((v,i) => { if(Math.abs(i - k) <= 1) load(i); else unload(i); if(i !== k) v.pause(); });
+    clearTimeout(playTimer);
+    playTimer = setTimeout(playCur, instant ? 50 : 700);   // start only once the page has settled
+    history.replaceState(null,'','#'+(k+1));
+  }
+  function go(k){
+    if(busy || k < 0 || k >= N || k === cur) return;
+    busy = true; hideHint(); show(k); setTimeout(() => busy = false, 800);
+  }
+  addEventListener('resize', () => show(cur, true));
+
+  /* ---------- input: one gesture = one page ---------- */
+  let wheelLock = 0;
+  addEventListener('wheel', e => {
+    e.preventDefault();
+    const now = Date.now(); if(now < wheelLock || Math.abs(e.deltaY) < 8) return;
+    wheelLock = now + 900; go(cur + (e.deltaY > 0 ? 1 : -1));
+  }, {passive:false});
+  let ty = 0, tx = 0, tmoved = false;
+  addEventListener('touchstart', e => { if(e.target.closest('#veil,#menu')) return; ty = e.touches[0].clientY; tx = e.touches[0].clientX; tmoved = false; }, {passive:true});
+  addEventListener('touchmove', e => { e.preventDefault(); }, {passive:false});
+  addEventListener('touchend', e => {
+    if(e.target.closest('#veil,#menu,.round,.btn')) return;
+    const dy = e.changedTouches[0].clientY - ty, dx = e.changedTouches[0].clientX - tx;
+    if(Math.abs(dy) > 45 && Math.abs(dy) > Math.abs(dx)){ tmoved = true; go(cur + (dy < 0 ? 1 : -1)); }
+  }, {passive:true});
+  addEventListener('keydown', e => {
+    if(e.key === 'Escape') return closeAll();
+    if(['ArrowDown','PageDown',' '].includes(e.key)){ e.preventDefault(); go(cur+1); }
+    if(['ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); go(cur-1); }
+  });
+  pagesEl.addEventListener('click', () => { if(tmoved){ tmoved = false; return; } playCur(); });   // tap replays this page
+
+  let hintGone = false;
+  function hideHint(){ if(hintGone) return; hintGone = true; const h = document.getElementById('hint'); h.style.opacity = 0; setTimeout(() => h.remove(), 500); }
+  setTimeout(hideHint, 8000);
+
+  /* ---------- music (one looping track, keeps going between pages) ---------- */
+  const music = document.getElementById('music'), snd = document.getElementById('snd');
+  let musicOn = true; try{ musicOn = localStorage.getItem('nh-music') !== 'off'; }catch(e){}
+  function paintSnd(){ snd.classList.toggle('off', !musicOn || music.paused); }
+  function tryMusic(){ if(musicOn && music.paused) music.play().then(paintSnd).catch(() => {}); }
+  snd.addEventListener('click', e => {
+    e.stopPropagation();
+    if(musicOn && !music.paused){ musicOn = false; music.pause(); } else { musicOn = true; music.play().catch(()=>{}); }
+    try{ localStorage.setItem('nh-music', musicOn ? 'on' : 'off'); }catch(err){}
+    paintSnd();
+  });
+  ['pointerdown','touchend','keydown'].forEach(ev => addEventListener(ev, function f(e){
+    if(e.target && e.target.closest && e.target.closest('#snd')) return;
+    tryMusic(); if(musicOn){ ['pointerdown','touchend','keydown'].forEach(x => removeEventListener(x, f)); }
+  }, {passive:true}));
+  music.addEventListener('play', paintSnd); music.addEventListener('pause', paintSnd);
+  tryMusic(); paintSnd();
+
+  /* ---------- hamburger + single-item panels ---------- */
+  const menu = document.getElementById('menu'), veil = document.getElementById('veil'), panel = document.getElementById('panel');
+  let cdTimer = null;
+  document.getElementById('burger').addEventListener('click', e => { e.stopPropagation(); menu.classList.toggle('open'); });
+  function closeAll(){ menu.classList.remove('open'); veil.classList.remove('open'); clearInterval(cdTimer); }
+  const X = '<button class="x" aria-label="Close">×</button>';
+  const orn = '<div class="orn">❖</div>';
+  const PANELS = {
+    countdown: () => X + '<small>Countdown</small><h2>Until We Celebrate</h2>' + orn + '<div class="cd" id="cd"></div><div class="note">Saturday, 21 November 2026 · 7:00 pm</div>',
+    location: () => X + '<small>Location</small><h2>The Venue</h2>' + orn + '<div class="venue">Jaypee Greens Golf &amp; Spa Resort</div><div class="loc">Greater Noida</div><a class="btn" href="'+MAP+'" target="_blank" rel="noopener">Open in Maps</a>',
+    contact: () => X + '<small>Contact</small><h2>Kindly RSVP</h2>' + orn +
+      [['Nitin Gupta','N','+919910170370','+91 99101 70370'],['Reena Gupta','R','+919811901370','+91 98119 01370']].map(p =>
+        '<div class="who"><div class="av">'+p[1]+'</div><div class="n">'+p[0]+'<small>'+p[3]+'</small></div><a class="btn" href="tel:'+p[2]+'">Call</a></div>').join('')
+  };
+  function tick(){
+    const el = document.getElementById('cd'); if(!el) return;
+    let s = Math.floor((new Date('2026-11-21T19:00:00+05:30') - Date.now()) / 1000);
+    if(s <= 0){ el.outerHTML = '<div class="note" style="font-size:22px">Today is the day! 🎉</div>'; return; }
+    const d = Math.floor(s/86400); s %= 86400; const h = Math.floor(s/3600); s %= 3600;
+    el.innerHTML = [[d,'days'],[h,'hours'],[Math.floor(s/60),'mins'],[s%60,'secs']].map(x => '<div><b>'+x[0]+'</b><i>'+x[1]+'</i></div>').join('');
+  }
+  menu.addEventListener('click', e => {
+    const b = e.target.closest('button'); if(!b) return;
+    menu.classList.remove('open'); panel.innerHTML = PANELS[b.dataset.p](); veil.classList.add('open');
+    if(b.dataset.p === 'countdown'){ tick(); cdTimer = setInterval(tick, 1000); }
+  });
+  veil.addEventListener('click', e => { if(e.target === veil || e.target.closest('.x')) closeAll(); });
+  addEventListener('click', e => { if(!e.target.closest('#menu,#burger')) menu.classList.remove('open'); });
+
+  show(Math.min(N, Math.max(1, parseInt(location.hash.slice(1)) || 1)) - 1, true);
+</script>
+</body>
+</html>
