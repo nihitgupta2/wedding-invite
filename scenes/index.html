@@ -17,6 +17,7 @@
   .page .bg{position:absolute;inset:-6%;background-size:cover;background-position:center;filter:blur(26px) brightness(.8)}
   .page video,.page .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
   .page video{background:transparent}
+  .zoom{position:absolute;inset:0;transform-origin:0 0;will-change:transform}
 
   /* top-right controls */
   .top{position:fixed;top:calc(12px + env(safe-area-inset-top));right:12px;z-index:20;display:flex;flex-direction:column;gap:10px}
@@ -121,8 +122,8 @@
   /* ---------- build pages ---------- */
   for(let k = 1; k <= N; k++){
     const p = document.createElement('section'); p.className = 'page';
-    p.innerHTML = '<div class="bg" style="background-image:url(p'+k+'.jpg)"></div><img class="poster" src="p'+k+'.jpg" alt="" draggable="false">' +
-      '<video muted loop playsinline preload="none" poster="p'+k+'.jpg"></video>';
+    p.innerHTML = '<div class="bg" style="background-image:url(p'+k+'.jpg)"></div><div class="zoom"><img class="poster" src="p'+k+'.jpg" alt="" draggable="false">' +
+      '<video muted loop playsinline preload="none" poster="p'+k+'.jpg"></video></div>';
     pagesEl.appendChild(p);
     const d = document.createElement('i'); d.onclick = () => go(k-1); dotsEl.appendChild(d);
   }
@@ -135,6 +136,7 @@
     v.currentTime = 0; const pr = v.play(); if(pr) pr.catch(() => {});
   }
   function show(k, instant){
+    resetZ(false);
     cur = k;
     pagesEl.style.transition = instant ? 'none' : '';
     pagesEl.style.transform = 'translateY(' + (-k * 100) + 'dvh)';
@@ -156,24 +158,60 @@
   addEventListener('wheel', e => {
     if(e.target.closest && e.target.closest('#sheetBg')) return;
     e.preventDefault();
+    if(e.ctrlKey){ zoomAt(e.clientX, e.clientY, Z.s * Math.exp(-e.deltaY * 0.01)); if(Z.s < 1.02) resetZ(true); return; }   // trackpad pinch / ctrl+wheel
+    if(Z.s > 1){ Z.x -= e.deltaX; Z.y -= e.deltaY; clampZ(); applyZ(false); return; }
     const now = Date.now(); if(now < wheelLock || Math.abs(e.deltaY) < 8) return;
     wheelLock = now + 900; go(cur + (e.deltaY > 0 ? 1 : -1));
   }, {passive:false});
-  let ty = 0, tx = 0, tmoved = false;
-  addEventListener('touchstart', e => { if(e.target.closest('#sheetBg')) return; ty = e.touches[0].clientY; tx = e.touches[0].clientX; tmoved = false; }, {passive:true});
-  addEventListener('touchmove', e => { if(!e.target.closest('#sheetBg')) e.preventDefault(); }, {passive:false});
-  addEventListener('touchend', e => {
-    if(e.target.closest('#sheetBg,.round,.btn,#fab')) return;
-    const dy = e.changedTouches[0].clientY - ty, dx = e.changedTouches[0].clientX - tx;
-    if(Math.abs(dy) > 45 && Math.abs(dy) > Math.abs(dx)){ tmoved = true; go(cur + (dy < 0 ? 1 : -1)); }
+  /* ---------- pinch-zoom / pan / double-tap zoom (per page) ---------- */
+  const Z = {s:1, x:0, y:0};
+  const zEl = () => pagesEl.children[cur].querySelector('.zoom');
+  function applyZ(anim){ const el = zEl(); el.style.transition = anim ? 'transform .25s ease' : 'none'; el.style.transform = Z.s === 1 ? '' : 'translate('+Z.x+'px,'+Z.y+'px) scale('+Z.s+')'; }
+  function clampZ(){ Z.s = Math.min(5, Math.max(1, Z.s)); Z.x = Math.min(0, Math.max(innerWidth*(1-Z.s), Z.x)); Z.y = Math.min(0, Math.max(innerHeight*(1-Z.s), Z.y)); }
+  function resetZ(anim){ Z.s = 1; Z.x = 0; Z.y = 0; if(pagesEl.children[cur]) applyZ(anim); }
+  function zoomAt(cx, cy, s){ const c0x = (cx - Z.x) / Z.s, c0y = (cy - Z.y) / Z.s; Z.s = s; Z.x = cx - Z.s*c0x; Z.y = cy - Z.s*c0y; clampZ(); if(Z.s === 1){ Z.x = 0; Z.y = 0; } applyZ(false); }
+
+  let ty = 0, tx = 0, mode = '', p0 = null, base = null, lastTap = 0, lastTouch = 0;
+  const dist = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+  const mid = t => [(t[0].clientX + t[1].clientX)/2, (t[0].clientY + t[1].clientY)/2];
+  const inUI = e => e.target.closest && e.target.closest('#sheetBg');
+  addEventListener('touchstart', e => {
+    if(inUI(e)) return; lastTouch = Date.now(); hideHint();
+    if(e.touches.length === 2){ mode = 'pinch'; p0 = {d:dist(e.touches), s:Z.s, x:Z.x, y:Z.y, m:mid(e.touches)}; }
+    else if(e.touches.length === 1){ mode = Z.s > 1 ? 'pan' : 'swipe'; tx = e.touches[0].clientX; ty = e.touches[0].clientY; base = {x:Z.x, y:Z.y}; }
   }, {passive:true});
+  addEventListener('touchmove', e => {
+    if(inUI(e)) return; e.preventDefault();
+    if(mode === 'pinch' && e.touches.length === 2){
+      const m = mid(e.touches), s = Math.min(5, Math.max(1, p0.s * dist(e.touches) / p0.d));
+      const c0x = (p0.m[0] - p0.x) / p0.s, c0y = (p0.m[1] - p0.y) / p0.s;
+      Z.s = s; Z.x = m[0] - s*c0x; Z.y = m[1] - s*c0y; clampZ(); applyZ(false);
+    } else if(mode === 'pan' && e.touches.length === 1){
+      Z.x = base.x + e.touches[0].clientX - tx; Z.y = base.y + e.touches[0].clientY - ty; clampZ(); applyZ(false);
+    }
+  }, {passive:false});
+  addEventListener('touchend', e => {
+    if(inUI(e)) return; lastTouch = Date.now();
+    if(mode === 'pinch'){ if(e.touches.length < 2){ if(Z.s < 1.25) resetZ(true); mode = ''; } return; }
+    if(e.target.closest('.round')) { mode = ''; return; }
+    const t = e.changedTouches[0], dy = t.clientY - ty, dx = t.clientX - tx;
+    if(mode === 'swipe' && Math.abs(dy) > 45 && Math.abs(dy) > Math.abs(dx)){ go(cur + (dy < 0 ? 1 : -1)); }
+    else if((mode === 'swipe' || mode === 'pan') && Math.hypot(dx, dy) < 12){            // tap → double-tap toggles zoom
+      const now = Date.now();
+      if(now - lastTap < 320){ lastTap = 0; if(Z.s > 1) resetZ(true); else { zoomAt(t.clientX, t.clientY, 2.5); applyZ(true); } } else lastTap = now;
+    }
+    mode = '';
+  }, {passive:true});
+  addEventListener('dblclick', e => {                                                  // mouse / trackpad
+    if(Date.now() - lastTouch < 700 || inUI(e) || e.target.closest('.round')) return;
+    if(Z.s > 1) resetZ(true); else { zoomAt(e.clientX, e.clientY, 2.5); applyZ(true); }
+  });
   addEventListener('keydown', e => {
     if(e.key === 'Escape') return closeSheet();
     if(bg.classList.contains('open')) return;
     if(['ArrowDown','PageDown',' '].includes(e.key)){ e.preventDefault(); go(cur+1); }
     if(['ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); go(cur-1); }
   });
-  pagesEl.addEventListener('click', () => { if(tmoved){ tmoved = false; return; } playCur(); });   // tap replays this page
 
   let hintGone = false;
   function hideHint(){ if(hintGone) return; hintGone = true; const h = document.getElementById('hint'); h.style.opacity = 0; setTimeout(() => h.remove(), 500); }
