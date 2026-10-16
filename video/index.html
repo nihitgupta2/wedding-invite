@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Nehal & Himanshu – Wedding Invitation</title>
+<meta property="og:title" content="Nehal & Himanshu – Wedding Invitation">
+<meta property="og:image" content="poster.jpg">
+<style>
+  :root{--maroon:#7a1f3d;--gold:#c9a24b;--cream:#fff7ee}
+  html,body{margin:0;height:100%;background:#000;overflow:hidden;-webkit-tap-highlight-color:transparent;user-select:none;font-family:Georgia,'Times New Roman',serif}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  #vid{width:100%;height:100%;object-fit:contain;background:#000}
+  #bar{position:fixed;left:0;right:0;top:0;height:4px;background:rgba(255,255,255,.2);z-index:3;pointer-events:none}
+  #bar i{display:block;height:100%;width:0;background:var(--gold)}
+  #start{position:fixed;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:#fff;font:16px system-ui,sans-serif;background:rgba(0,0,0,.35);cursor:pointer;text-align:center}
+  #start .play{width:84px;height:84px;border-radius:50%;background:var(--maroon);border:3px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:36px;padding-left:6px;animation:pulse 2.4s infinite}
+  #start.hide{display:none}
+  .ctl{position:fixed;top:14px;right:14px;z-index:5;width:42px;height:42px;border-radius:50%;border:0;background:rgba(0,0,0,.5);color:#fff;font-size:19px;cursor:pointer;padding:0}
+  #mute{right:14px}#rep{right:64px;display:none}
+  /* menu button */
+  #fab{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);height:50px;padding:0 22px;border-radius:25px;border:2px solid var(--gold);background:var(--maroon);color:#fff;font:600 16px system-ui,sans-serif;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.5);z-index:5;display:flex;align-items:center;gap:8px;white-space:nowrap;animation:pulse 2.4s infinite}
+  #fab:active{transform:translateX(-50%) scale(.95)}
+  @keyframes pulse{0%{box-shadow:0 4px 16px rgba(0,0,0,.5),0 0 0 0 rgba(201,162,75,.8)}70%,100%{box-shadow:0 4px 16px rgba(0,0,0,.5),0 0 0 16px rgba(201,162,75,0)}}
+  #sheetBg{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;z-index:6;align-items:flex-end;justify-content:center}
+  #sheetBg.open{display:flex}
+  body:has(#sheetBg.open) #fab{visibility:hidden}
+  #sheet{background:var(--cream);color:#3a2a2a;width:100%;max-width:480px;max-height:86%;overflow:auto;border-radius:20px 20px 0 0;padding:18px 18px 28px;box-sizing:border-box;user-select:text;animation:up .22s ease}
+  @keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+  #sheet h2{margin:0 0 4px;color:var(--maroon);font-weight:normal;font-size:22px;text-align:center}
+  #sheet .sub{text-align:center;font-size:13px;opacity:.7;margin-bottom:14px}
+  .close{float:right;border:0;background:none;font-size:26px;color:var(--maroon);cursor:pointer;line-height:1}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .tile{border:1px solid var(--gold);background:#fff;border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer;font:inherit;color:var(--maroon);font-size:15px;text-decoration:none;display:block}
+  .tile span{display:block;font-size:26px;margin-bottom:4px}
+  .back{border:0;background:none;color:var(--maroon);font:inherit;cursor:pointer;padding:0;margin-bottom:8px}
+  .btn{display:inline-block;border:0;background:var(--maroon);color:#fff;padding:9px 16px;border-radius:20px;font:14px system-ui,sans-serif;cursor:pointer;text-decoration:none;margin:4px 3px}
+  .btn.alt{background:#25a244}
+  .btn.sm{padding:5px 11px;font-size:12px}
+  .center{text-align:center}
+  .ev{border-bottom:1px solid #eadcc8;padding:10px 0;display:flex;gap:10px;align-items:center}
+  .ev b{color:var(--maroon)}
+  .ev .t{flex:1;font-size:14px;line-height:1.4}
+  .cd{display:flex;justify-content:center;gap:10px;margin:8px 0 16px}
+  .cd div{background:var(--maroon);color:#fff;border-radius:12px;padding:8px 6px;min-width:56px;text-align:center}
+  .cd b{display:block;font-size:24px;font-weight:normal}
+  .cd small{font:11px system-ui,sans-serif;opacity:.85}
+  #board{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
+  .card{aspect-ratio:1;border-radius:12px;border:1px solid var(--gold);background:var(--maroon);color:#fff;font-size:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .25s;padding:0}
+  .card.up{background:#fff;transform:rotateY(0)}
+  .card.done{background:#f1e4c3}
+  .card .f{visibility:hidden}.card.up .f,.card.done .f{visibility:visible}
+</style>
+</head>
+<body>
+<div id="stage"><video id="vid" src="invite.mp4" poster="poster.jpg" playsinline preload="auto"></video></div>
+<div id="bar"><i></i></div>
+<div id="start"><div class="play">&#9654;</div><div>Tap to open the invitation<br><small style="opacity:.8">(sound on 🔊)</small></div></div>
+<button class="ctl" id="mute" aria-label="Mute">🔊</button>
+<button class="ctl" id="rep" aria-label="Replay">↻</button>
+<button id="fab" aria-label="Open menu"><span style="font-size:20px">&#10024;</span> Venue · Events · RSVP · Game</button>
+
+<div id="sheetBg"><div id="sheet"></div></div>
+
+<script>
+  /* ---------- video player ---------- */
+  const v = document.getElementById('vid'), startEl = document.getElementById('start');
+  const bar = document.querySelector('#bar i'), muteB = document.getElementById('mute'), repB = document.getElementById('rep');
+  function play(){ v.muted = false; v.play().catch(() => { v.muted = true; v.play().catch(()=>{}); sync(); }); }
+  function sync(){ muteB.textContent = v.muted ? '🔇' : '🔊'; }
+  startEl.addEventListener('click', () => { startEl.classList.add('hide'); play(); sync(); });
+  document.getElementById('stage').addEventListener('click', () => { v.paused ? play() : v.pause(); });
+  muteB.addEventListener('click', () => { v.muted = !v.muted; sync(); });
+  repB.addEventListener('click', () => { v.currentTime = 0; repB.style.display = 'none'; play(); });
+  v.addEventListener('timeupdate', () => { bar.style.width = (v.currentTime / (v.duration || 1) * 100) + '%'; });
+  v.addEventListener('ended', () => { repB.style.display = 'block'; });
+  addEventListener('keydown', e => {
+    if(e.key === 'Escape') return closeSheet();
+    if(bg.classList.contains('open')) return;
+    if(e.key === ' ') { e.preventDefault(); v.paused ? play() : v.pause(); }
+  });
+
+  /* ---------- menu ---------- */
+  const bg = document.getElementById('sheetBg'), sheet = document.getElementById('sheet');
+  const MAP = 'https://www.google.com/maps/search/?api=1&query=Jaypee+Greens+Golf+and+Spa+Resort+Greater+Noida';
+  const VENUE = 'Jaypee Greens Golf & Spa Resort, Greater Noida';
+  // [title, venue spot, card page, start (UTC), hours, label]
+  const EVENTS = [
+    ['Mehendi – Sunshine Carnival','Spa Garden',3,'20261120T063000Z',4,'Fri 20 Nov · 12:00 pm'],
+    ['Tilak & Ring Ceremony','Royal Ballroom',4,'20261120T133000Z',2,'Fri 20 Nov · 7:00 pm'],
+    ['The Musical Soirée','Royal Ballroom',4,'20261120T153000Z',3,'Fri 20 Nov · 9:00 pm'],
+    ['Haldi – Tales of Joy','Spa Garden',5,'20261121T050000Z',3,'Sat 21 Nov · 10:30 am'],
+    ['Wedding – Nehal & Himanshu','Royal Garden',6,'20261121T133000Z',4,'Sat 21 Nov · 7:00 pm'],
+  ];
+  const pad = n => String(n).padStart(2,'0');
+  function addHours(s,h){
+    const d = new Date(Date.UTC(+s.slice(0,4),+s.slice(4,6)-1,+s.slice(6,8),+s.slice(9,11),+s.slice(11,13)) + h*36e5);
+    return d.getUTCFullYear()+pad(d.getUTCMonth()+1)+pad(d.getUTCDate())+'T'+pad(d.getUTCHours())+pad(d.getUTCMinutes())+'00Z';
+  }
+  function ics(list){
+    const lines = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//NehalHimanshuWedding//EN'];
+    list.forEach((e,k) => lines.push('BEGIN:VEVENT','UID:nh-'+k+'-'+e[3]+'@wedding','DTSTAMP:20261001T000000Z',
+      'DTSTART:'+e[3],'DTEND:'+addHours(e[3],e[4]),'SUMMARY:'+e[0],'LOCATION:'+e[1]+'\\, '+VENUE.replace(/,/g,'\\,'),'END:VEVENT'));
+    lines.push('END:VCALENDAR');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([lines.join('\r\n')],{type:'text/calendar'}));
+    a.download = list.length > 1 ? 'nehal-himanshu-wedding.ics' : 'event.ics';
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+  let timer = null;
+  const head = (t,back) => (back ? '<button class="back" data-a="home">‹ Back</button>' : '') +
+    '<button class="close" data-a="close" aria-label="Close">×</button><h2>'+t+'</h2>';
+  const views = {
+    home: () => head('Nehal & Himanshu') + '<div class="sub">20–21 November 2026</div><div class="grid">'+
+      '<a class="tile" href="'+MAP+'" target="_blank" rel="noopener"><span>📍</span>Venue Map</a>'+
+      '<button class="tile" data-a="events"><span>🗓️</span>Events</button>'+
+      '<button class="tile" data-a="countdown"><span>⏳</span>Countdown</button>'+
+      '<button class="tile" data-a="rsvp"><span>💌</span>RSVP</button>'+
+      '<button class="tile" data-a="game" style="grid-column:span 2"><span>🎮</span>Play a little game</button></div>',
+    events: () => head('Events',true) + '<div class="sub">'+VENUE+'</div>'+
+      EVENTS.map((e,k) => '<div class="ev"><div class="t"><b>'+e[0]+'</b><br>'+e[5]+' · '+e[1]+'</div>'+
+        '<button class="btn sm" data-a="ics" data-k="'+k+'">+ Calendar</button></div>').join('')+
+      '<div class="center" style="margin-top:12px"><button class="btn" data-a="icsall">Add all events</button> <a class="btn" href="'+MAP+'" target="_blank" rel="noopener">Open map</a></div>',
+    countdown: () => head('Until the Wedding',true) + '<div class="sub">Saturday, 21 November 2026 · 7:00 pm</div><div class="cd" id="cd"></div>',
+    rsvp: () => head('RSVP',true) + '<div class="sub">We would love to celebrate with you</div><div class="center">'+
+      '<p><b>Nitin Gupta</b><br><a class="btn" href="tel:+919910170370">📞 Call</a><a class="btn alt" href="https://wa.me/919910170370?text='+encodeURIComponent('Hello! RSVP for Nehal & Himanshu\'s wedding: ')+'" target="_blank" rel="noopener">WhatsApp</a></p>'+
+      '<p><b>Reena Gupta</b><br><a class="btn" href="tel:+919811901370">📞 Call</a><a class="btn alt" href="https://wa.me/919811901370?text='+encodeURIComponent('Hello! RSVP for Nehal & Himanshu\'s wedding: ')+'" target="_blank" rel="noopener">WhatsApp</a></p></div>',
+    game: () => head('Match the Pairs',true) + '<div class="sub" id="moves">Moves: 0</div><div id="board"></div><div class="center"><button class="btn" data-a="game">Shuffle</button></div>',
+  };
+  function render(v){
+    clearInterval(timer);
+    sheet.innerHTML = views[v]();
+    if(v === 'countdown') tick(), timer = setInterval(tick,1000);
+    if(v === 'game') startGame();
+  }
+  function tick(){
+    const el = document.getElementById('cd'); if(!el) return;
+    let s = Math.floor((new Date('2026-11-21T19:00:00+05:30') - Date.now())/1000);
+    if(s <= 0){ el.innerHTML = '<b style="color:#7a1f3d;font-size:20px">Today is the day! 🎉</b>'; return; }
+    const d = Math.floor(s/86400); s %= 86400; const h = Math.floor(s/3600); s %= 3600;
+    el.innerHTML = [[d,'days'],[h,'hours'],[Math.floor(s/60),'mins'],[s%60,'secs']].map(x => '<div><b>'+x[0]+'</b><small>'+x[1]+'</small></div>').join('');
+  }
+  function openSheet(){ bg.classList.add('open'); render('home'); }
+  function closeSheet(){ bg.classList.remove('open'); clearInterval(timer); }
+  document.getElementById('fab').addEventListener('click', openSheet);
+  bg.addEventListener('click', e => {
+    if(e.target === bg) return closeSheet();
+    const t = e.target.closest('[data-a]'); if(!t) return;
+    const a = t.dataset.a;
+    if(a === 'close') closeSheet();
+    else if(a === 'ics') ics([EVENTS[+t.dataset.k]]);
+    else if(a === 'icsall') ics(EVENTS);
+    else render(a);
+  });
+
+  /* ---------- memory game ---------- */
+  function startGame(){
+    const icons = ['💍','🛕','🌸','🪔','🎶','✨'];
+    const deck = icons.concat(icons).map(v => ({v,r:Math.random()})).sort((a,b) => a.r-b.r).map(x => x.v);
+    const board = document.getElementById('board'), mv = document.getElementById('moves');
+    let first = null, lock = false, moves = 0, pairs = 0;
+    board.innerHTML = deck.map((v,k) => '<button class="card" data-i="'+k+'"><span class="f">'+v+'</span></button>').join('');
+    board.onclick = e => {
+      const c = e.target.closest('.card');
+      if(!c || lock || c === first || c.classList.contains('done')) return;
+      c.classList.add('up');
+      if(!first){ first = c; return; }
+      mv.textContent = 'Moves: ' + (++moves);
+      if(deck[+first.dataset.i] === deck[+c.dataset.i]){
+        first.classList.replace('up','done'); c.classList.replace('up','done'); first = null;
+        if(++pairs === icons.length) mv.textContent = '🎉 Matched all in ' + moves + ' moves!';
+      } else {
+        lock = true; const f = first; first = null;
+        setTimeout(() => { f.classList.remove('up'); c.classList.remove('up'); lock = false; }, 700);
+      }
+    };
+  }
+
+</script>
+</body>
+</html>
